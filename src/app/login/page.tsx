@@ -82,7 +82,7 @@ export default function LoginPage() {
       .then((res) => res.json())
       .then((data) => {
         if (data.needsSetup) {
-          window.location.href = '/setup'
+          window.location.href = (process.env.NEXT_PUBLIC_BASE_PATH || '') + '/setup'
         }
       })
       .catch(() => {
@@ -124,7 +124,7 @@ export default function LoginPage() {
 
     // Full reload ensures the session cookie is sent on all subsequent requests.
     // router.push() + refresh() can race and use stale RSC payloads.
-    window.location.href = '/'
+    window.location.href = (process.env.NEXT_PUBLIC_BASE_PATH || '') + '/'
     return true
   }, [t])
 
@@ -249,7 +249,7 @@ export default function LoginPage() {
               {t('noAdminDescription')}
             </p>
             <Button
-              onClick={() => { window.location.href = '/setup' }}
+              onClick={() => { window.location.href = (process.env.NEXT_PUBLIC_BASE_PATH || '') + '/setup' }}
               size="sm"
               className="mt-3"
             >

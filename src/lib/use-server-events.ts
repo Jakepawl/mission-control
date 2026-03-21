@@ -49,7 +49,7 @@ export function useServerEvents() {
         eventSourceRef.current.close()
       }
 
-      const es = new EventSource('/api/events')
+      const es = new EventSource((process.env.NEXT_PUBLIC_BASE_PATH || '') + '/api/events')
       eventSourceRef.current = es
 
       es.onopen = () => {

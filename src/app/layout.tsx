@@ -101,6 +101,14 @@ export default async function RootLayout({
             __html: `(function(){try{var t=localStorage.getItem('theme')||'void';var light=['light','paper'];if(light.indexOf(t)===-1)document.documentElement.classList.add('dark')}catch(e){}})()`,
           }}
         />
+        {/* Patch window.fetch and EventSource to prepend Next.js basePath for relative paths.
+            Static string literal — no user input, no XSS vector. */}
+        <script
+          nonce={nonce}
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var base='/admin';var _f=window.fetch;window.fetch=function(u,o){if(typeof u==='string'&&u.startsWith('/')&&!u.startsWith(base+'/')){u=base+u}return _f.call(this,u,o)};var _E=window.EventSource;window.EventSource=function(u,o){if(typeof u==='string'&&u.startsWith('/')&&!u.startsWith(base+'/')){u=base+u}return new _E(u,o)};window.EventSource.prototype=_E.prototype;window.EventSource.CONNECTING=_E.CONNECTING;window.EventSource.OPEN=_E.OPEN;window.EventSource.CLOSED=_E.CLOSED})()`,
+          }}
+        />
       </head>
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`} suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>

@@ -4,10 +4,12 @@ import { CrewAIAdapter } from './crewai'
 import { LangGraphAdapter } from './langgraph'
 import { AutoGenAdapter } from './autogen'
 import { ClaudeSdkAdapter } from './claude-sdk'
+import { NemoClawAdapter } from './nemoclaw'
 import type { FrameworkAdapter } from './adapter'
 
 const adapters: Record<string, () => FrameworkAdapter> = {
   openclaw: () => new OpenClawAdapter(),
+  nemoclaw: () => new NemoClawAdapter(),
   generic: () => new GenericAdapter(),
   crewai: () => new CrewAIAdapter(),
   langgraph: () => new LangGraphAdapter(),

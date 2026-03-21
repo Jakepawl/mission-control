@@ -89,7 +89,7 @@ export default function SetupPage() {
       })
 
       if (!data.needsSetup) {
-        window.location.href = '/login'
+        window.location.href = (process.env.NEXT_PUBLIC_BASE_PATH || '') + '/login'
         return
       }
 
@@ -168,7 +168,7 @@ export default function SetupPage() {
       updateProgress(3, 'done')
 
       await new Promise((r) => setTimeout(r, 500))
-      window.location.href = '/'
+      window.location.href = (process.env.NEXT_PUBLIC_BASE_PATH || '') + '/'
     } catch {
       updateProgress(1, 'error')
       setError(t('networkError'))
