@@ -206,6 +206,8 @@ function mapAgentToMC(agent: OpenClawAgent): {
   const name = agent.identity?.name || agent.name || agent.id
   const role = agent.identity?.theme || 'agent'
   // Store the full config minus systemPrompt/soul (which can be large)
+  // Pass through any extra fields from openclaw.json (budget, trust, framework, etc.)
+  const { id: _id, name: _name, default: _default, ...extraFields } = agent as any
   const configData = enrichAgentConfigFromWorkspace({
     openclawId: agent.id,
     model: agent.model,
@@ -217,10 +219,16 @@ function mapAgentToMC(agent: OpenClawAgent): {
     workspace: agent.workspace,
     agentDir: agent.agentDir,
     isDefault: agent.default || false,
+    ...Object.fromEntries(
+      Object.entries(extraFields).filter(([k]) =>
+        !['id', 'model', 'identity', 'sandbox', 'tools', 'subagents', 'memorySearch', 'workspace', 'agentDir'].includes(k)
+      )
+    ),
   })
 
-  // Read soul.md from the agent's workspace if available
+  // Read soul.md from workspace, or use inline soul from config
   const soul_content = readWorkspaceFile(agent.workspace, 'soul.md')
+    ?? (agent as any).soul ?? null
 
   return { name, role, config: configData, soul_content }
 }
